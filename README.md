@@ -8,6 +8,9 @@ Processing
 Sony HDR-AS15
 * http://www.sony.jp/actioncam/products/HDR-AS15/
 
+Syphon for Processing
+https://github.com/Syphon/Processing
+
 How to use
 ========
 1. あらかじめSony HDR-AS15を録画停止状態にしておく。
@@ -31,14 +34,20 @@ Sample sketch for hdras15_p5 library
 ========
 <pre>
 import net.sabamiso.processing.hdras15.*;
+import codeanticode.syphon.*;
+SyphonServer server;
 
 HDRAS15 hdras15;
 
 void setup() {
-  size(640, 360);
+  size(640, 360, P3D);
+  frameRate(60);
+  //start syphon server
+   server = new SyphonServer(this, "Processing Syphon");
 
   hdras15 = new HDRAS15();
 
+  // connect to Sony HDR-AS15
   boolean rv;
   rv = hdras15.connect();
   if (rv == false) {
@@ -46,12 +55,14 @@ void setup() {
     return;
   }
 }
-	
+
 void draw() {
   PImage img = hdras15.getImage();
   if (img != null) {
     image(img, 0, 0);
+ 
+ //send through syphon video server   
+ server.sendImage(img);  
   }
-}
-</pre>
+}</pre>
 
