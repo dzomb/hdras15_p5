@@ -1,68 +1,43 @@
-hdras15_p5ライブラリとは？
-========
-ProcessingからWi-fi経由でSony HDR-AS15のライブビュー画像を取得するライブラリ。640x360のライブビュー画像を取得することができます。
+- Monitor ActionCam and Send to Syphon Server
+
+Using Yoggy's Library to get a live view image of Sony HDR-AS15 from Wi-fi via Processing, I added SyphonServer to send the feed to another program.  You can get a live view image of 640x360.
 
 Processing
-* http://processing.org/
+
+http://processing.org/
 
 Sony HDR-AS15
-* http://www.sony.jp/actioncam/products/HDR-AS15/
+
+http://www.sony.jp/actioncam/products/HDR-AS15/
 
 Syphon for Processing
+
 https://github.com/Syphon/Processing
 
 How to use
-========
-1. あらかじめSony HDR-AS15を録画停止状態にしておく。
-2. Sony HDR-AS15の自動スリープ機能を無効に設定する。
-   * SETUP -> A.OFF -> OFF
-3. Sony HDR-AS15のWi-fi機能を有効に設定する。
-   * SETUP -> RMOTE -> ONに設定
-4. PCからHDR-AS15のWi-fiに接続する。
-   * SSIDが"DIRECT-????:HDR-AS15"のアクセスポイントへ接続。
-5. ping 10.0.0.1を実行してHDR-AS15と接続できていることを確認する。
-6. hdras15_p5ライブラリをlibrariesディレクトリへインストール。
-   * ディレクトリ名はhdras15_p5でlibrariesディレクトリにコピーしてください。
-7. サンプルスケッチを実行。
+
+- Keep the recording stopped on the Sony HDR-AS15 in advance.
+
+- Disable the automatic sleep function of the Sony HDR-AS15.
+  SETUP -> A.OFF -> OFF
+
+- To enable the Wi-fi feature of the Sony HDR-AS15.
+  SETUP -> RMOTE -> ON
+
+- Connect to Wi-fi of the HDR-AS15 from your PC or Mac.
+
+- The connection to the access point of: "HDR-AS15? DIRECT-???" The SSID.
+
+- Make sure that you are able to connect with the HDR-AS15 by running the ping 10.0.0.1.
+
+- Install to libraries directory hdras15_p5 library.
+- Install the Syphon for Processing library.
+
+- Please copy the libraries directory hdras15_p5 directory name.
+
+- Run the sample sketch in processing.
+
 
 Tips?
-========
-PCからHDR-AS15のWi-fiに接続した際、たまにDHCPによるIPの取得に失敗することがあるので、10.0.1.5/16などのIPアドレスを手動で設定しておくといいかもしれないです。
-
-
-Sample sketch for hdras15_p5 library
-========
-<pre>
-import net.sabamiso.processing.hdras15.*;
-import codeanticode.syphon.*;
-SyphonServer server;
-
-HDRAS15 hdras15;
-
-void setup() {
-  size(640, 360, P3D);
-  frameRate(60);
-  //start syphon server
-   server = new SyphonServer(this, "Processing Syphon");
-
-  hdras15 = new HDRAS15();
-
-  // connect to Sony HDR-AS15
-  boolean rv;
-  rv = hdras15.connect();
-  if (rv == false) {
-    println("error: connect() failed...");
-    return;
-  }
-}
-
-void draw() {
-  PImage img = hdras15.getImage();
-  if (img != null) {
-    image(img, 0, 0);
- 
- //send through syphon video server   
- server.sendImage(img);  
-  }
-}</pre>
+When you connect to Wi-fi of the HDR-AS15 from the PC, because it may fail to obtain an IP by DHCP sometimes, it might help if you set the IP address manually, such as 10.0.1.5/16 .
 
